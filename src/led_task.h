@@ -1,6 +1,19 @@
 #pragma once
+#include <Arduino.h>
 
-#define LED_PIN 2
+const uint8_t LED_PIN = 2;
 
-void ledTaskInit();
-extern void ledTask(void *pvParameters);
+class LedTask_t
+{
+private:
+    void initPeripheral();
+
+public:
+    LedTask_t();
+
+    void run(void *pvParameters);
+
+    static void runTask(void *pvParameters);
+};
+
+extern LedTask_t ledTaskInstance;

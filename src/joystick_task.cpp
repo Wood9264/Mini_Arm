@@ -1,6 +1,4 @@
-// #include <Arduino.h>
 #include "joystick_task.h"
-// #include <XboxSeriesXControllerESP32_asukiaaa.hpp>
 
 JoystickTask_t joystickTaskInstance;
 

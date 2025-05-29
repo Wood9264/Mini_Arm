@@ -1,22 +1,32 @@
-#include <Arduino.h>
 #include "led_task.h"
 
-void ledTask(void *pvParameters)
+LedTask_t ledTaskInstance;
+
+LedTask_t::LedTask_t()
 {
-    ledTaskInit();
+}
+
+void LedTask_t::initPeripheral()
+{
+    pinMode(LED_PIN, OUTPUT);
+}
+
+void LedTask_t::run(void *pvParameters)
+{
+    initPeripheral();
 
     while (true)
     {
         digitalWrite(LED_PIN, HIGH);
-        delay(500); // Delay for 500 milliseconds
+        delay(500);
         digitalWrite(LED_PIN, LOW);
-        delay(500); // Delay for 500 milliseconds
+        delay(500);
         Serial.println("LED Task is running");
-        Serial.println(xPortGetCoreID()); // Print the core ID where this task is running
+        Serial.println(xPortGetCoreID());
     }
 }
 
-void ledTaskInit()
+void LedTask_t::runTask(void *pvParameters)
 {
-    pinMode(LED_PIN, OUTPUT);
+    ledTaskInstance.run(pvParameters);
 }

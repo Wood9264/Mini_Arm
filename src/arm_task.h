@@ -31,7 +31,7 @@ const int8_t JOINT2_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节2方向
 const int16_t JOINT2_MIN_ANGLE = -90;                     // 关节2最小角度
 const int16_t JOINT2_MAX_ANGLE = 90;                      // 关节2最大角度
 const uint8_t JOINT2_POSITIVE_ZERO_ANGLE = 90;            // 关节2正向舵机零点角度
-const uint8_t JOINT2_NEGATIVE_ZERO_ANGLE = 90;            // 关节2反向舵机零点角度
+const uint8_t JOINT2_NEGATIVE_ZERO_ANGLE = 97;            // 关节2反向舵机零点角度
 
 const int16_t JOINT3_INIT_ANGLE = 0;                      // 关节3初始角度
 const int8_t JOINT3_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节3方向

@@ -4,7 +4,7 @@
 #include "share_data.h"
 
 // 任务延时时间
-const uint16_t JOYSTICK_TASK_DELAY = 1;
+const uint16_t JOYSTICK_TASK_DELAY = 8;
 
 class JoystickTask_t
 {

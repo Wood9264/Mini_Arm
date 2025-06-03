@@ -69,8 +69,6 @@ const uint8_t TOOL_ZERO_ANGLE = 90;                     // 工具舵机零点角
 class Joint_t
 {
 public:
-    // 初始化角度
-    int16_t initAngle;
     // 运动方向
     int8_t direction;
     // 最小角度
@@ -97,7 +95,6 @@ public:
     SingleServoJoint_t() = default;
     SingleServoJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
     {
-        this->initAngle = initAngle;
         this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
@@ -130,7 +127,6 @@ public:
     DoubleServoJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle,
                        uint8_t positiveJointZeroAngle, uint8_t negativeJointZeroAngle)
     {
-        this->initAngle = initAngle;
         this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
@@ -161,7 +157,6 @@ public:
     StepperJoint_t() = default;
     StepperJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle)
     {
-        this->initAngle = initAngle;
         this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
@@ -190,7 +185,6 @@ public:
     ServoTool_t() = default;
     ServoTool_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
     {
-        this->initAngle = initAngle;
         this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;

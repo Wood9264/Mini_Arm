@@ -2,11 +2,15 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>
 #include <FastAccelStepper.h>
+#include "share_data.h"
 
 const uint16_t ARM_TASK_DELAY = 1000;
 
 const int8_t JOINT_DIRECTION_POSITIVE = 1;  // 正向
 const int8_t JOINT_DIRECTION_NEGATIVE = -1; // 反向
+
+const uint16_t SERVO_MIN_PULSE_WIDTH = 500;  // 舵机最小脉宽
+const uint16_t SERVO_MAX_PULSE_WIDTH = 2500; // 舵机最大脉宽
 
 const uint8_t JOINT1_STEPPER_DIR_PIN = 5;           // 关节1步进电机方向引脚
 const uint8_t JOINT1_STEPPER_STEP_PIN = 18;         // 关节1步进电机步进引脚
@@ -21,12 +25,12 @@ const uint8_t JOINT4_SERVO_PIN = 17;          // 关节4舵机引脚
 const uint8_t JOINT5_SERVO_PIN = 16;          // 关节5舵机引脚
 const uint8_t TOOL_SERVO_PIN = 4;             // 工具舵机引脚
 
-const int16_t JOINT1_INIT_ANGLE = 0;                     // 关节1初始角度
+const int16_t JOINT1_INIT_ANGLE = 0;                      // 关节1初始角度
 const int8_t JOINT1_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节1方向
 const int16_t JOINT1_MIN_ANGLE = -70;                     // 关节1最小角度
 const int16_t JOINT1_MAX_ANGLE = 70;                      // 关节1最大角度
 
-const int16_t JOINT2_INIT_ANGLE = 90;                      // 关节2初始角度
+const int16_t JOINT2_INIT_ANGLE = 90;                     // 关节2初始角度
 const int8_t JOINT2_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节2方向
 const int16_t JOINT2_MIN_ANGLE = -90;                     // 关节2最小角度
 const int16_t JOINT2_MAX_ANGLE = 90;                      // 关节2最大角度
@@ -60,7 +64,7 @@ const uint8_t TOOL_ZERO_ANGLE = 90;                     // 工具舵机零点角
 // 关节基类
 class Joint_t
 {
-protected:
+public:
     // 初始化角度
     int16_t initAngle;
     // 运动方向
@@ -74,7 +78,6 @@ protected:
     // 目标角度
     int16_t targetAngle;
 
-public:
     Joint_t() = default;
     virtual ~Joint_t() = default;
 };
@@ -97,6 +100,12 @@ public:
         this->jointZeroAngle = jointZeroAngle;
         this->currentAngle = initAngle;
         this->targetAngle = initAngle;
+    }
+    void moveToTarget()
+    {
+        // 将目标角度转换为舵机角度
+        int16_t servoAngle = jointZeroAngle + targetAngle * direction;
+        servo.write(servoAngle);
     }
 };
 
@@ -125,6 +134,16 @@ public:
         this->negativeJointZeroAngle = negativeJointZeroAngle;
         this->currentAngle = initAngle;
         this->targetAngle = initAngle;
+    }
+    void moveToTarget()
+    {
+        // 将目标角度转换为正向舵机角度
+        int16_t positiveServoAngle = positiveJointZeroAngle + targetAngle * direction;
+        positiveServo.write(positiveServoAngle);
+
+        // 将目标角度转换为反向舵机角度
+        int16_t negativeServoAngle = negativeJointZeroAngle - targetAngle * direction;
+        negativeServo.write(negativeServoAngle);
     }
 };
 
@@ -166,11 +185,24 @@ public:
         this->currentAngle = initAngle;
         this->targetAngle = initAngle;
     }
+    void moveToTarget()
+    {
+        // 将目标角度转换为舵机角度
+        int16_t servoAngle = jointZeroAngle + targetAngle * direction;
+        servo.write(servoAngle);
+    }
 };
 
 class armTask_t
 {
 private:
+    enum armState_t
+    {
+        ARM_STATE_ZERO_FORCE, // 无力模式
+        ARM_STATE_INITIALIZE, // 初始化模式
+        ARM_STATE_RUN,        // 运行模式
+    };
+
     StepperJoint_t joint1;
     DoubleServoJoint_t joint2;
     SingleServoJoint_t joint3;
@@ -178,7 +210,14 @@ private:
     SingleServoJoint_t joint5;
     ServoTool_t tool;
 
+    armState_t armState = ARM_STATE_ZERO_FORCE; // 机械臂状态
+
     void initPeripheral();
+    void updateData();
+    void control();
+    void zeroForceControl();
+    void initializeControl();
+    void runControl();
 
 public:
     armTask_t();

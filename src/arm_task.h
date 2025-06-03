@@ -12,11 +12,15 @@ const int8_t JOINT_DIRECTION_NEGATIVE = -1; // 反向
 const uint16_t SERVO_MIN_PULSE_WIDTH = 500;  // 舵机最小脉宽
 const uint16_t SERVO_MAX_PULSE_WIDTH = 2500; // 舵机最大脉宽
 
-const uint8_t JOINT1_STEPPER_DIR_PIN = 5;           // 关节1步进电机方向引脚
-const uint8_t JOINT1_STEPPER_STEP_PIN = 18;         // 关节1步进电机步进引脚
-const uint8_t JOINT1_STEPPER_ENABLE_PIN = 19;       // 关节1步进电机使能引脚
-const uint16_t JOINT1_STEPPER_MAX_SPEED = 3200;     // 关节1步进电机最大速度
-const uint16_t JOINT1_STEPPER_ACCELERATION = 30000; // 关节1步进电机加速度
+const uint8_t STEPPER_STEPS_PER_REVOLUTION = 200; // 步进电机每转一圈的步数
+const uint8_t STEPPER_MICROSTEPS = 8;             // 步进电机微步数
+const uint8_t STEPPER_GEAR_RATIO = 8;             // 步进电机传动比
+
+const uint8_t JOINT1_STEPPER_DIR_PIN = 5;        // 关节1步进电机方向引脚
+const uint8_t JOINT1_STEPPER_STEP_PIN = 18;      // 关节1步进电机步进引脚
+const uint8_t JOINT1_STEPPER_ENABLE_PIN = 19;    // 关节1步进电机使能引脚
+const uint16_t JOINT1_STEPPER_MAX_SPEED = 400;   // 关节1步进电机最大速度，rpm
+const uint16_t JOINT1_STEPPER_ACCELERATION = 50; // 关节1步进电机加速度，rpm/s
 
 const uint8_t JOINT2_POSITIVE_SERVO_PIN = 19; // 关节2正向舵机引脚
 const uint8_t JOINT2_NEGATIVE_SERVO_PIN = 18; // 关节2反向舵机引脚
@@ -163,6 +167,15 @@ public:
         this->maxAngle = maxAngle;
         this->currentAngle = initAngle;
         this->targetAngle = initAngle;
+    }
+    void moveToTarget()
+    {
+        // 将目标角度转换为步进电机步数
+        int32_t steps = targetAngle / 360.0f * STEPPER_STEPS_PER_REVOLUTION * STEPPER_MICROSTEPS * STEPPER_GEAR_RATIO * direction;
+        if (stepper)
+        {
+            stepper->moveTo(steps);
+        }
     }
 };
 

@@ -22,8 +22,8 @@ void armTask_t::initPeripheral()
     joint1.stepper->setDirectionPin(JOINT1_STEPPER_DIR_PIN);
     joint1.stepper->setEnablePin(JOINT1_STEPPER_ENABLE_PIN);
     joint1.stepper->setAutoEnable(false);
-    joint1.stepper->setSpeedInHz(JOINT1_STEPPER_MAX_SPEED);
-    joint1.stepper->setAcceleration(JOINT1_STEPPER_ACCELERATION);
+    joint1.stepper->setSpeedInHz(JOINT1_STEPPER_MAX_SPEED / 60.0f * STEPPER_STEPS_PER_REVOLUTION * STEPPER_MICROSTEPS * STEPPER_GEAR_RATIO);
+    joint1.stepper->setAcceleration(JOINT1_STEPPER_ACCELERATION / 60.0f * STEPPER_STEPS_PER_REVOLUTION * STEPPER_MICROSTEPS * STEPPER_GEAR_RATIO);
 
     joint2.positiveServo.setPeriodHertz(50);
     joint2.positiveServo.attach(JOINT2_POSITIVE_SERVO_PIN, SERVO_MIN_PULSE_WIDTH, SERVO_MAX_PULSE_WIDTH);

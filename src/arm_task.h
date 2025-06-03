@@ -21,12 +21,12 @@ const uint8_t JOINT4_SERVO_PIN = 17;          // 关节4舵机引脚
 const uint8_t JOINT5_SERVO_PIN = 16;          // 关节5舵机引脚
 const uint8_t TOOL_SERVO_PIN = 4;             // 工具舵机引脚
 
-const int16_t JOINT1_INIT_ANGLE = 90;                     // 关节1初始角度
+const int16_t JOINT1_INIT_ANGLE = 0;                     // 关节1初始角度
 const int8_t JOINT1_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节1方向
 const int16_t JOINT1_MIN_ANGLE = -70;                     // 关节1最小角度
 const int16_t JOINT1_MAX_ANGLE = 70;                      // 关节1最大角度
 
-const int16_t JOINT2_INIT_ANGLE = 0;                      // 关节2初始角度
+const int16_t JOINT2_INIT_ANGLE = 90;                      // 关节2初始角度
 const int8_t JOINT2_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节2方向
 const int16_t JOINT2_MIN_ANGLE = -90;                     // 关节2最小角度
 const int16_t JOINT2_MAX_ANGLE = 90;                      // 关节2最大角度

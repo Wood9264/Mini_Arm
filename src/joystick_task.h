@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <XboxSeriesXControllerESP32_asukiaaa.hpp>
+#include "share_data.h"
 
 // 任务延时时间
 const uint16_t JOYSTICK_TASK_DELAY = 1;

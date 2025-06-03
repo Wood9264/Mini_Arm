@@ -12,8 +12,8 @@ void setup()
     Serial.begin(115200);
 
     xTaskCreatePinnedToCore(armTaskInstance.runTask, "ARM Task", 2048, NULL, 1, &armTaskHandle, 1);
-    xTaskCreatePinnedToCore(ledTaskInstance.runTask, "LED Task", 1024, NULL, 1, &ledTaskHandle, 0);
-    xTaskCreatePinnedToCore(joystickTaskInstance.runTask, "Joystick Task", 4096, NULL, 1, &joystickTaskHandle, 0);
+    xTaskCreatePinnedToCore(ledTaskInstance.runTask, "LED Task", 1024, NULL, 1, &ledTaskHandle, 1);
+    xTaskCreatePinnedToCore(joystickTaskInstance.runTask, "Joystick Task", 4096, NULL, 1, &joystickTaskHandle, 1);
 }
 
 void loop()

@@ -133,6 +133,14 @@ void armTask_t::initializeControl()
     joint5.targetAngle = JOINT5_INIT_ANGLE;
     tool.targetAngle = TOOL_INIT_ANGLE;
 
+    // 限制关节角度
+    joint1.targetAngle = constrain(joint1.targetAngle, joint1.minAngle, joint1.maxAngle);
+    joint2.targetAngle = constrain(joint2.targetAngle, joint2.minAngle, joint2.maxAngle);
+    joint3.targetAngle = constrain(joint3.targetAngle, joint3.minAngle, joint3.maxAngle);
+    joint4.targetAngle = constrain(joint4.targetAngle, joint4.minAngle, joint4.maxAngle);
+    joint5.targetAngle = constrain(joint5.targetAngle, joint5.minAngle, joint5.maxAngle);
+    tool.targetAngle = constrain(tool.targetAngle, tool.minAngle, tool.maxAngle);
+
     joint2.moveToTarget();
     delay(500);
     joint3.moveToTarget();

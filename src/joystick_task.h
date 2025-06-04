@@ -11,7 +11,7 @@ const uint16_t JOYSTICK_MIDDLE_VALUE = 32767;
 // 摇杆从初始位置开始的最大偏移值
 const uint16_t JOYSTICK_MAX_OFFSET = 32767;
 // 扳机从初始位置开始的最大偏移值
-const uint16_t TRIGGER_MAX_OFFSET = 255;
+const uint16_t TRIGGER_MAX_OFFSET = 1023;
 // 按键最大偏移值
 const uint16_t BUTTON_MAX_OFFSET = 1;
 

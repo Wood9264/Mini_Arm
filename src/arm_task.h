@@ -56,17 +56,17 @@ const int16_t JOINT2_MAX_ANGLE = 90;                      // 关节2最大角度
 const uint8_t JOINT2_POSITIVE_ZERO_ANGLE = 90;            // 关节2正向舵机零点角度
 const uint8_t JOINT2_NEGATIVE_ZERO_ANGLE = 97;            // 关节2反向舵机零点角度
 
-const int16_t JOINT3_INIT_ANGLE = 0;                      // 关节3初始角度
+const int16_t JOINT3_INIT_ANGLE = -90;                    // 关节3初始角度
 const int8_t JOINT3_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节3方向
 const int16_t JOINT3_MIN_ANGLE = -90;                     // 关节3最小角度
 const int16_t JOINT3_MAX_ANGLE = 90;                      // 关节3最大角度
 const uint8_t JOINT3_ZERO_ANGLE = 90;                     // 关节3舵机零点角度
 
 const int16_t JOINT4_INIT_ANGLE = 0;                      // 关节4初始角度
-const int8_t JOINT4_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节4方向
+const int8_t JOINT4_DIRECTION = JOINT_DIRECTION_NEGATIVE; // 关节4方向
 const int16_t JOINT4_MIN_ANGLE = -90;                     // 关节4最小角度
 const int16_t JOINT4_MAX_ANGLE = 90;                      // 关节4最大角度
-const uint8_t JOINT4_ZERO_ANGLE = 90;                     // 关节4舵机零点角度
+const uint8_t JOINT4_ZERO_ANGLE = 137;                    // 关节4舵机零点角度
 
 const int16_t JOINT5_INIT_ANGLE = 0;                      // 关节5初始角度
 const int8_t JOINT5_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节5方向
@@ -76,9 +76,9 @@ const uint8_t JOINT5_ZERO_ANGLE = 90;                     // 关节5舵机零点
 
 const int16_t TOOL_INIT_ANGLE = 0;                      // 工具初始角度
 const int8_t TOOL_DIRECTION = JOINT_DIRECTION_POSITIVE; // 工具方向
-const int16_t TOOL_MIN_ANGLE = -90;                     // 工具最小角度
-const int16_t TOOL_MAX_ANGLE = 90;                      // 工具最大角度
-const uint8_t TOOL_ZERO_ANGLE = 90;                     // 工具舵机零点角度
+const int16_t TOOL_MIN_ANGLE = 0;                       // 工具最小角度
+const int16_t TOOL_MAX_ANGLE = 180;                     // 工具最大角度
+const uint8_t TOOL_ZERO_ANGLE = 0;                      // 工具舵机零点角度
 
 // 关节基类
 class Joint_t

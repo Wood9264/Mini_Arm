@@ -142,11 +142,11 @@ void armTask_t::initializeControl()
     tool.targetAngle = constrain(tool.targetAngle, tool.minAngle, tool.maxAngle);
 
     joint2.moveToTarget();
-    delay(500);
+    delay(1000);
     joint3.moveToTarget();
-    delay(500);
+    delay(1000);
     joint4.moveToTarget();
-    delay(500);
+    delay(1000);
     joint5.moveToTarget();
     tool.moveToTarget();
     armState = ARM_STATE_RUN;

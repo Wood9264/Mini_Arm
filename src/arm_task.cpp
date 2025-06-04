@@ -143,3 +143,32 @@ void armTask_t::initializeControl()
     tool.moveToTarget();
     armState = ARM_STATE_RUN;
 }
+
+void armTask_t::runControl()
+{
+    Serial.println("Run Control");
+
+    JoystickData_t joystickData = getJoystickData();
+
+    joint1.targetAngle += (joystickData.joyLHori - JOYSTICK_MIDDLE_VALUE) * JOINT1_DIRECTION * JOINT1_JOYSTICK_ANGLE_STEP;
+    joint2.targetAngle += (joystickData.joyLVert - JOYSTICK_MIDDLE_VALUE) * JOINT2_DIRECTION * JOINT2_JOYSTICK_ANGLE_STEP;
+    joint3.targetAngle += (joystickData.joyRHori - JOYSTICK_MIDDLE_VALUE) * JOINT3_DIRECTION * JOINT3_JOYSTICK_ANGLE_STEP;
+    joint4.targetAngle += (joystickData.joyRVert - JOYSTICK_MIDDLE_VALUE) * JOINT4_DIRECTION * JOINT4_JOYSTICK_ANGLE_STEP;
+    joint5.targetAngle += (joystickData.btnDirLeft - joystickData.btnDirRight) * JOINT5_DIRECTION * JOINT5_JOYSTICK_ANGLE_STEP;
+    tool.targetAngle += (joystickData.trigLT - joystickData.trigRT) * TOOL_DIRECTION * TOOL_JOYSTICK_ANGLE_STEP;
+
+    // 限制关节角度
+    joint1.targetAngle = constrain(joint1.targetAngle, joint1.minAngle, joint1.maxAngle);
+    joint2.targetAngle = constrain(joint2.targetAngle, joint2.minAngle, joint2.maxAngle);
+    joint3.targetAngle = constrain(joint3.targetAngle, joint3.minAngle, joint3.maxAngle);
+    joint4.targetAngle = constrain(joint4.targetAngle, joint4.minAngle, joint4.maxAngle);
+    joint5.targetAngle = constrain(joint5.targetAngle, joint5.minAngle, joint5.maxAngle);
+    tool.targetAngle = constrain(tool.targetAngle, tool.minAngle, tool.maxAngle);
+
+    joint1.moveToTarget();
+    joint2.moveToTarget();
+    joint3.moveToTarget();
+    joint4.moveToTarget();
+    joint5.moveToTarget();
+    tool.moveToTarget();
+}

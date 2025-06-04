@@ -3,8 +3,9 @@
 #include <ESP32Servo.h>
 #include <FastAccelStepper.h>
 #include "share_data.h"
+#include "joystick_task.h"
 
-const uint16_t ARM_TASK_DELAY = 1000;
+const uint16_t ARM_TASK_DELAY = 10;
 
 const int8_t JOINT_DIRECTION_POSITIVE = 1;  // 正向
 const int8_t JOINT_DIRECTION_NEGATIVE = -1; // 反向
@@ -15,6 +16,20 @@ const uint16_t SERVO_MAX_PULSE_WIDTH = 2500; // 舵机最大脉宽
 const uint8_t STEPPER_STEPS_PER_REVOLUTION = 200; // 步进电机每转一圈的步数
 const uint8_t STEPPER_MICROSTEPS = 8;             // 步进电机微步数
 const uint8_t STEPPER_GEAR_RATIO = 8;             // 步进电机传动比
+
+const float JOINT1_MAX_ANGLE_PER_SECOND = 90.0f; // 关节1最大角速度，度/秒
+const float JOINT2_MAX_ANGLE_PER_SECOND = 90.0f; // 关节2最大角速度，度/秒
+const float JOINT3_MAX_ANGLE_PER_SECOND = 90.0f; // 关节3最大角速度，度/秒
+const float JOINT4_MAX_ANGLE_PER_SECOND = 90.0f; // 关节4最大角速度，度/秒
+const float JOINT5_MAX_ANGLE_PER_SECOND = 10.0f; // 关节5最大角速度，度/秒
+const float TOOL_MAX_ANGLE_PER_SECOND = 45.0f;   // 工具最大角速度，度/秒
+
+const float JOINT1_JOYSTICK_ANGLE_STEP = JOINT1_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节1摇杆通道每单位每次执行的角度变化，度
+const float JOINT2_JOYSTICK_ANGLE_STEP = JOINT2_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节2摇杆通道每单位每次执行的角度变化，度
+const float JOINT3_JOYSTICK_ANGLE_STEP = JOINT3_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节3摇杆通道每单位每次执行的角度变化，度
+const float JOINT4_JOYSTICK_ANGLE_STEP = JOINT4_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节4摇杆通道每单位每次执行的角度变化，度
+const float JOINT5_JOYSTICK_ANGLE_STEP = JOINT5_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / BUTTON_MAX_OFFSET;   // 关节5摇杆通道每单位每次执行的角度变化，度
+const float TOOL_JOYSTICK_ANGLE_STEP = TOOL_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / TRIGGER_MAX_OFFSET;      // 工具摇杆通道每单位每次执行的角度变化，度
 
 const uint8_t JOINT1_STEPPER_DIR_PIN = 5;        // 关节1步进电机方向引脚
 const uint8_t JOINT1_STEPPER_STEP_PIN = 18;      // 关节1步进电机步进引脚
@@ -76,9 +91,9 @@ public:
     // 最大角度
     int16_t maxAngle;
     // 当前角度
-    int16_t currentAngle;
+    float currentAngle;
     // 目标角度
-    int16_t targetAngle;
+    float targetAngle;
 
     Joint_t() = default;
     virtual ~Joint_t() = default;

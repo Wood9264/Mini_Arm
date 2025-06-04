@@ -21,8 +21,8 @@ const float JOINT1_MAX_ANGLE_PER_SECOND = 90.0f; // 关节1最大角速度，度
 const float JOINT2_MAX_ANGLE_PER_SECOND = 90.0f; // 关节2最大角速度，度/秒
 const float JOINT3_MAX_ANGLE_PER_SECOND = 90.0f; // 关节3最大角速度，度/秒
 const float JOINT4_MAX_ANGLE_PER_SECOND = 90.0f; // 关节4最大角速度，度/秒
-const float JOINT5_MAX_ANGLE_PER_SECOND = 10.0f; // 关节5最大角速度，度/秒
-const float TOOL_MAX_ANGLE_PER_SECOND = 45.0f;   // 工具最大角速度，度/秒
+const float JOINT5_MAX_ANGLE_PER_SECOND = 20.0f; // 关节5最大角速度，度/秒
+const float TOOL_MAX_ANGLE_PER_SECOND = 90.0f;   // 工具最大角速度，度/秒
 
 const float JOINT1_JOYSTICK_ANGLE_STEP = JOINT1_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节1摇杆通道每单位每次执行的角度变化，度
 const float JOINT2_JOYSTICK_ANGLE_STEP = JOINT2_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节2摇杆通道每单位每次执行的角度变化，度
@@ -31,9 +31,9 @@ const float JOINT4_JOYSTICK_ANGLE_STEP = JOINT4_MAX_ANGLE_PER_SECOND / 1000.0f *
 const float JOINT5_JOYSTICK_ANGLE_STEP = JOINT5_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / BUTTON_MAX_OFFSET;   // 关节5摇杆通道每单位每次执行的角度变化，度
 const float TOOL_JOYSTICK_ANGLE_STEP = TOOL_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / TRIGGER_MAX_OFFSET;      // 工具摇杆通道每单位每次执行的角度变化，度
 
-const uint8_t JOINT1_STEPPER_DIR_PIN = 5;        // 关节1步进电机方向引脚
-const uint8_t JOINT1_STEPPER_STEP_PIN = 18;      // 关节1步进电机步进引脚
-const uint8_t JOINT1_STEPPER_ENABLE_PIN = 19;    // 关节1步进电机使能引脚
+const uint8_t JOINT1_STEPPER_DIR_PIN = 15;       // 关节1步进电机方向引脚
+const uint8_t JOINT1_STEPPER_STEP_PIN = 2;       // 关节1步进电机步进引脚
+const uint8_t JOINT1_STEPPER_ENABLE_PIN = 0;     // 关节1步进电机使能引脚
 const uint16_t JOINT1_STEPPER_MAX_SPEED = 400;   // 关节1步进电机最大速度，rpm
 const uint16_t JOINT1_STEPPER_ACCELERATION = 50; // 关节1步进电机加速度，rpm/s
 
@@ -77,7 +77,7 @@ const uint8_t JOINT5_ZERO_ANGLE = 90;                     // 关节5舵机零点
 const int16_t TOOL_INIT_ANGLE = 0;                      // 工具初始角度
 const int8_t TOOL_DIRECTION = JOINT_DIRECTION_POSITIVE; // 工具方向
 const int16_t TOOL_MIN_ANGLE = 0;                       // 工具最小角度
-const int16_t TOOL_MAX_ANGLE = 180;                     // 工具最大角度
+const int16_t TOOL_MAX_ANGLE = 150;                     // 工具最大角度
 const uint8_t TOOL_ZERO_ANGLE = 0;                      // 工具舵机零点角度
 
 // 关节基类

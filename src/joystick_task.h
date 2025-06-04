@@ -6,14 +6,7 @@
 // 死区阈值
 const uint8_t JOYSTICK_DEADZONE = 100;
 // 死区处理
-inline uint16_t applyDeadzone(int16_t value, uint8_t deadzone = JOYSTICK_DEADZONE)
-{
-    if (abs(value) < deadzone)
-    {
-        return 0;
-    }
-    return value;
-}
+#define APPLY_DEADZONE(value) (((abs(value)) < (JOYSTICK_DEADZONE)) ? 0 : (value))
 
 // 任务延时时间
 const uint16_t JOYSTICK_TASK_DELAY = 8;

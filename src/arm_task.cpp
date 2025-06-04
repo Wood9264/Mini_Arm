@@ -158,12 +158,12 @@ void armTask_t::runControl()
 
     JoystickData_t joystickData = getJoystickData();
 
-    joint1.targetAngle += (applyDeadzone(joystickData.joyLHori) - JOYSTICK_MIDDLE_VALUE) * JOINT1_DIRECTION * JOINT1_JOYSTICK_ANGLE_STEP;
-    joint2.targetAngle += (applyDeadzone(joystickData.joyLVert) - JOYSTICK_MIDDLE_VALUE) * JOINT2_DIRECTION * JOINT2_JOYSTICK_ANGLE_STEP;
-    joint3.targetAngle += (applyDeadzone(joystickData.joyRHori) - JOYSTICK_MIDDLE_VALUE) * JOINT3_DIRECTION * JOINT3_JOYSTICK_ANGLE_STEP;
-    joint4.targetAngle += (applyDeadzone(joystickData.joyRVert) - JOYSTICK_MIDDLE_VALUE) * JOINT4_DIRECTION * JOINT4_JOYSTICK_ANGLE_STEP;
-    joint5.targetAngle += (applyDeadzone(joystickData.btnDirLeft) - joystickData.btnDirRight) * JOINT5_DIRECTION * JOINT5_JOYSTICK_ANGLE_STEP;
-    tool.targetAngle += (applyDeadzone(joystickData.trigLT) - joystickData.trigRT) * TOOL_DIRECTION * TOOL_JOYSTICK_ANGLE_STEP;
+    joint1.targetAngle += (APPLY_DEADZONE(joystickData.joyLHori) - JOYSTICK_MIDDLE_VALUE) * JOINT1_DIRECTION * JOINT1_JOYSTICK_ANGLE_STEP;
+    joint2.targetAngle += (APPLY_DEADZONE(joystickData.joyLVert) - JOYSTICK_MIDDLE_VALUE) * JOINT2_DIRECTION * JOINT2_JOYSTICK_ANGLE_STEP;
+    joint3.targetAngle += (APPLY_DEADZONE(joystickData.joyRHori) - JOYSTICK_MIDDLE_VALUE) * JOINT3_DIRECTION * JOINT3_JOYSTICK_ANGLE_STEP;
+    joint4.targetAngle += (APPLY_DEADZONE(joystickData.joyRVert) - JOYSTICK_MIDDLE_VALUE) * JOINT4_DIRECTION * JOINT4_JOYSTICK_ANGLE_STEP;
+    joint5.targetAngle += (joystickData.btnDirLeft - joystickData.btnDirRight) * JOINT5_DIRECTION * JOINT5_JOYSTICK_ANGLE_STEP;
+    tool.targetAngle += (joystickData.trigLT - joystickData.trigRT) * TOOL_DIRECTION * TOOL_JOYSTICK_ANGLE_STEP;
 
     // 限制关节角度
     joint1.targetAngle = constrain(joint1.targetAngle, joint1.minAngle, joint1.maxAngle);

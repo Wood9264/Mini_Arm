@@ -88,8 +88,6 @@ public:
     int16_t minAngle;
     // 最大角度
     int16_t maxAngle;
-    // 当前角度
-    float currentAngle;
     // 目标角度
     float targetAngle;
 
@@ -111,7 +109,6 @@ public:
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->jointZeroAngle = jointZeroAngle;
-        this->currentAngle = initAngle;
         this->targetAngle = initAngle;
     }
     void moveToTarget()
@@ -143,7 +140,6 @@ public:
         this->maxAngle = maxAngle;
         this->positiveJointZeroAngle = positiveJointZeroAngle;
         this->negativeJointZeroAngle = negativeJointZeroAngle;
-        this->currentAngle = initAngle;
         this->targetAngle = initAngle;
     }
     void moveToTarget()
@@ -170,7 +166,6 @@ public:
     {
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
-        this->currentAngle = initAngle;
         this->targetAngle = initAngle;
     }
     void moveToTarget()
@@ -198,7 +193,6 @@ public:
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->jointZeroAngle = jointZeroAngle;
-        this->currentAngle = initAngle;
         this->targetAngle = initAngle;
     }
     void moveToTarget()

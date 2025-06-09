@@ -18,10 +18,10 @@ const uint8_t STEPPER_MICROSTEPS = 8;             // 步进电机微步数
 const uint8_t STEPPER_GEAR_RATIO = 8;             // 步进电机传动比
 
 const float JOINT1_MAX_ANGLE_PER_SECOND = 30.0f; // 关节1最大角速度，度/秒
-const float JOINT2_MAX_ANGLE_PER_SECOND = 90.0f; // 关节2最大角速度，度/秒
-const float JOINT3_MAX_ANGLE_PER_SECOND = 90.0f; // 关节3最大角速度，度/秒
-const float JOINT4_MAX_ANGLE_PER_SECOND = 90.0f; // 关节4最大角速度，度/秒
-const float JOINT5_MAX_ANGLE_PER_SECOND = 20.0f; // 关节5最大角速度，度/秒
+const float JOINT2_MAX_ANGLE_PER_SECOND = 30.0f; // 关节2最大角速度，度/秒
+const float JOINT3_MAX_ANGLE_PER_SECOND = 30.0f; // 关节3最大角速度，度/秒
+const float JOINT4_MAX_ANGLE_PER_SECOND = 60.0f; // 关节4最大角速度，度/秒
+const float JOINT5_MAX_ANGLE_PER_SECOND = 50.0f; // 关节5最大角速度，度/秒
 const float TOOL_MAX_ANGLE_PER_SECOND = 90.0f;   // 工具最大角速度，度/秒
 
 const float JOINT1_JOYSTICK_ANGLE_STEP = JOINT1_MAX_ANGLE_PER_SECOND / 1000.0f * ARM_TASK_DELAY / JOYSTICK_MAX_OFFSET; // 关节1摇杆通道每单位每次执行的角度变化，度

@@ -38,7 +38,7 @@ void updateJoystickData(const XboxControllerNotificationParser &xboxNotif)
 
 JoystickData_t getJoystickData()
 {
-    JoystickData_t data;
+    JoystickData_t data = {};
     if (xSemaphoreTake(joystickDataMutex, portMAX_DELAY) == pdTRUE)
     {
         data = joystickData;

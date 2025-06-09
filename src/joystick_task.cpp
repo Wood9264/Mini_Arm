@@ -28,7 +28,7 @@ void JoystickTask_t::run(void *pvParameters)
             }
             else
             {
-                Serial.print(xbox_string());
+                // Serial.print(xbox_string());
                 // 更新共享数据
                 updateJoystickData(xboxController.xboxNotif);
             }

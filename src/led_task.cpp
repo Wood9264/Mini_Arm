@@ -22,7 +22,6 @@ void LedTask_t::run(void *pvParameters)
         digitalWrite(LED_PIN, LOW);
         delay(500);
         Serial.println("LED Task is running");
-        Serial.println(xPortGetCoreID());
     }
 }
 

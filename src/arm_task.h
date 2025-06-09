@@ -17,7 +17,7 @@ const uint8_t STEPPER_STEPS_PER_REVOLUTION = 200; // 步进电机每转一圈的
 const uint8_t STEPPER_MICROSTEPS = 8;             // 步进电机微步数
 const uint8_t STEPPER_GEAR_RATIO = 8;             // 步进电机传动比
 
-const float JOINT1_MAX_ANGLE_PER_SECOND = 90.0f; // 关节1最大角速度，度/秒
+const float JOINT1_MAX_ANGLE_PER_SECOND = 30.0f; // 关节1最大角速度，度/秒
 const float JOINT2_MAX_ANGLE_PER_SECOND = 90.0f; // 关节2最大角速度，度/秒
 const float JOINT3_MAX_ANGLE_PER_SECOND = 90.0f; // 关节3最大角速度，度/秒
 const float JOINT4_MAX_ANGLE_PER_SECOND = 90.0f; // 关节4最大角速度，度/秒

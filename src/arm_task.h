@@ -45,7 +45,7 @@ const uint8_t JOINT5_SERVO_PIN = 16;          // 关节5舵机引脚
 const uint8_t TOOL_SERVO_PIN = 4;             // 工具舵机引脚
 
 const int16_t JOINT1_INIT_ANGLE = 0;                      // 关节1初始角度
-const int8_t JOINT1_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节1方向
+const int8_t JOINT1_DIRECTION = JOINT_DIRECTION_NEGATIVE; // 关节1方向
 const int16_t JOINT1_MIN_ANGLE = -70;                     // 关节1最小角度
 const int16_t JOINT1_MAX_ANGLE = 70;                      // 关节1最大角度
 
@@ -63,13 +63,13 @@ const int16_t JOINT3_MAX_ANGLE = 90;                      // 关节3最大角度
 const uint8_t JOINT3_ZERO_ANGLE = 90;                     // 关节3舵机零点角度
 
 const int16_t JOINT4_INIT_ANGLE = 0;                      // 关节4初始角度
-const int8_t JOINT4_DIRECTION = JOINT_DIRECTION_NEGATIVE; // 关节4方向
+const int8_t JOINT4_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节4方向
 const int16_t JOINT4_MIN_ANGLE = -90;                     // 关节4最小角度
 const int16_t JOINT4_MAX_ANGLE = 90;                      // 关节4最大角度
 const uint8_t JOINT4_ZERO_ANGLE = 137;                    // 关节4舵机零点角度
 
 const int16_t JOINT5_INIT_ANGLE = 0;                      // 关节5初始角度
-const int8_t JOINT5_DIRECTION = JOINT_DIRECTION_POSITIVE; // 关节5方向
+const int8_t JOINT5_DIRECTION = JOINT_DIRECTION_NEGATIVE; // 关节5方向
 const int16_t JOINT5_MIN_ANGLE = -90;                     // 关节5最小角度
 const int16_t JOINT5_MAX_ANGLE = 90;                      // 关节5最大角度
 const uint8_t JOINT5_ZERO_ANGLE = 90;                     // 关节5舵机零点角度
@@ -84,8 +84,6 @@ const uint8_t TOOL_ZERO_ANGLE = 0;                      // 工具舵机零点角
 class Joint_t
 {
 public:
-    // 运动方向
-    int8_t direction;
     // 最小角度
     int16_t minAngle;
     // 最大角度
@@ -108,9 +106,8 @@ public:
     uint8_t jointZeroAngle;
 
     SingleServoJoint_t() = default;
-    SingleServoJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
+    SingleServoJoint_t(int16_t initAngle, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
     {
-        this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->jointZeroAngle = jointZeroAngle;
@@ -120,7 +117,7 @@ public:
     void moveToTarget()
     {
         // 将目标角度转换为舵机角度
-        int16_t servoAngle = jointZeroAngle + targetAngle * direction;
+        int16_t servoAngle = jointZeroAngle + targetAngle;
         servo.write(servoAngle);
     }
 };
@@ -139,10 +136,9 @@ public:
     uint8_t negativeJointZeroAngle;
 
     DoubleServoJoint_t() = default;
-    DoubleServoJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle,
+    DoubleServoJoint_t(int16_t initAngle, int16_t minAngle, int16_t maxAngle,
                        uint8_t positiveJointZeroAngle, uint8_t negativeJointZeroAngle)
     {
-        this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->positiveJointZeroAngle = positiveJointZeroAngle;
@@ -153,11 +149,11 @@ public:
     void moveToTarget()
     {
         // 将目标角度转换为正向舵机角度
-        int16_t positiveServoAngle = positiveJointZeroAngle + targetAngle * direction;
+        int16_t positiveServoAngle = positiveJointZeroAngle + targetAngle;
         positiveServo.write(positiveServoAngle);
 
         // 将目标角度转换为反向舵机角度
-        int16_t negativeServoAngle = negativeJointZeroAngle - targetAngle * direction;
+        int16_t negativeServoAngle = negativeJointZeroAngle - targetAngle;
         negativeServo.write(negativeServoAngle);
     }
 };
@@ -170,9 +166,8 @@ public:
     FastAccelStepper *stepper = NULL;
 
     StepperJoint_t() = default;
-    StepperJoint_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle)
+    StepperJoint_t(int16_t initAngle, int16_t minAngle, int16_t maxAngle)
     {
-        this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->currentAngle = initAngle;
@@ -181,7 +176,7 @@ public:
     void moveToTarget()
     {
         // 将目标角度转换为步进电机步数
-        int32_t steps = targetAngle / 360.0f * STEPPER_STEPS_PER_REVOLUTION * STEPPER_MICROSTEPS * STEPPER_GEAR_RATIO * direction;
+        int32_t steps = targetAngle / 360.0f * STEPPER_STEPS_PER_REVOLUTION * STEPPER_MICROSTEPS * STEPPER_GEAR_RATIO;
         if (stepper)
         {
             stepper->moveTo(steps);
@@ -198,9 +193,8 @@ public:
     uint8_t jointZeroAngle;
 
     ServoTool_t() = default;
-    ServoTool_t(int16_t initAngle, int8_t direction, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
+    ServoTool_t(int16_t initAngle, int16_t minAngle, int16_t maxAngle, uint8_t jointZeroAngle)
     {
-        this->direction = direction;
         this->minAngle = minAngle;
         this->maxAngle = maxAngle;
         this->jointZeroAngle = jointZeroAngle;
@@ -210,7 +204,7 @@ public:
     void moveToTarget()
     {
         // 将目标角度转换为舵机角度
-        int16_t servoAngle = jointZeroAngle + targetAngle * direction;
+        int16_t servoAngle = jointZeroAngle + targetAngle;
         servo.write(servoAngle);
     }
 };

@@ -5,18 +5,22 @@ armTask_t armTaskInstance;
 armTask_t::armTask_t()
 {
     joint1 = StepperJoint_t(JOINT1_INIT_ANGLE, JOINT1_MIN_ANGLE, JOINT1_MAX_ANGLE);
-    joint2 = DoubleServoJoint_t(JOINT2_INIT_ANGLE, JOINT2_MIN_ANGLE, JOINT2_MAX_ANGLE,
-                                JOINT2_POSITIVE_ZERO_ANGLE, JOINT2_NEGATIVE_ZERO_ANGLE);
+    joint2 = DoubleServoJoint_t(JOINT2_INIT_ANGLE, JOINT2_MIN_ANGLE, JOINT2_MAX_ANGLE, JOINT2_POSITIVE_ZERO_ANGLE, JOINT2_NEGATIVE_ZERO_ANGLE);
     joint3 = SingleServoJoint_t(JOINT3_INIT_ANGLE, JOINT3_MIN_ANGLE, JOINT3_MAX_ANGLE, JOINT3_ZERO_ANGLE);
     joint4 = SingleServoJoint_t(JOINT4_INIT_ANGLE, JOINT4_MIN_ANGLE, JOINT4_MAX_ANGLE, JOINT4_ZERO_ANGLE);
     joint5 = SingleServoJoint_t(JOINT5_INIT_ANGLE, JOINT5_MIN_ANGLE, JOINT5_MAX_ANGLE, JOINT5_ZERO_ANGLE);
     tool = ServoTool_t(TOOL_INIT_ANGLE, TOOL_MIN_ANGLE, TOOL_MAX_ANGLE, TOOL_ZERO_ANGLE);
 
+    // 初始化机械臂状态为无力模式
     armState = ARM_STATE_ZERO_FORCE;
 }
 
+/**
+ * @brief 初始化机械臂任务的外设
+ */
 void armTask_t::initPeripheral()
 {
+    // 在0核上初始化步进电机
     joint1.engine.init(0);
     joint1.stepper = joint1.engine.stepperConnectToPin(JOINT1_STEPPER_STEP_PIN);
     joint1.stepper->setDirectionPin(JOINT1_STEPPER_DIR_PIN);
@@ -59,10 +63,14 @@ void armTask_t::runTask(void *pvParameters)
     armTaskInstance.run(pvParameters);
 }
 
+/**
+ * @brief 更新机械臂任务的数据
+ */
 void armTask_t::updateData()
 {
     JoystickData_t joystickData = getJoystickData();
 
+    // X键无力模式，Y键初始化
     if (joystickData.btnX)
     {
         armState = ARM_STATE_ZERO_FORCE;
@@ -76,6 +84,9 @@ void armTask_t::updateData()
     }
 }
 
+/**
+ * @brief 控制机械臂
+ */
 void armTask_t::control()
 {
     switch (armState)
@@ -94,6 +105,10 @@ void armTask_t::control()
     }
 }
 
+/**
+ * @brief 无力模式控制
+ *        在此模式下，机械臂的所有关节都停止输出
+ */
 void armTask_t::zeroForceControl()
 {
     Serial.println("Zero Force Control");
@@ -107,6 +122,10 @@ void armTask_t::zeroForceControl()
     tool.servo.detach();
 }
 
+/**
+ * @brief 初始化模式控制
+ *        在此模式下，机械臂的所有关节都移动到初始位置，随后进入运行模式
+ */
 void armTask_t::initializeControl()
 {
     Serial.println("Initialize Control");
@@ -141,6 +160,7 @@ void armTask_t::initializeControl()
     joint5.targetAngle = constrain(joint5.targetAngle, joint5.minAngle, joint5.maxAngle);
     tool.targetAngle = constrain(tool.targetAngle, tool.minAngle, tool.maxAngle);
 
+    // 依次移动到目标角度
     joint2.moveToTarget();
     delay(1000);
     joint3.moveToTarget();
@@ -152,6 +172,10 @@ void armTask_t::initializeControl()
     armState = ARM_STATE_RUN;
 }
 
+/**
+ * @brief 运行模式控制
+ *        在此模式下，机械臂的所有关节根据摇杆输入进行控制
+ */
 void armTask_t::runControl()
 {
     Serial.println("Run Control");

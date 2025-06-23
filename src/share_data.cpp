@@ -3,6 +3,10 @@
 JoystickData_t joystickData;
 SemaphoreHandle_t joystickDataMutex = xSemaphoreCreateMutex();
 
+/**
+ * @brief 更新共享的摇杆数据
+ * @param xboxNotif Xbox 控制器数据
+ */
 void updateJoystickData(const XboxControllerNotificationParser &xboxNotif)
 {
     if (xSemaphoreTake(joystickDataMutex, portMAX_DELAY) == pdTRUE)
@@ -36,6 +40,10 @@ void updateJoystickData(const XboxControllerNotificationParser &xboxNotif)
     }
 }
 
+/**
+ * @brief 获取共享的摇杆数据
+ * @return 返回当前的摇杆数据
+ */
 JoystickData_t getJoystickData()
 {
     JoystickData_t data = {};

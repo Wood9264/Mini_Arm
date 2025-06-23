@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-const uint8_t LED_PIN = 2;
+const uint8_t LED_PIN = 2; // LED 引脚
 
 class LedTask_t
 {

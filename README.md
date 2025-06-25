@@ -180,6 +180,8 @@ ESP32是具有两个核心的单片机，可以真正意义上实现双线程并
 
 # AI文档
 
+[DeepWiki文档](https://deepwiki.com/Wood9264/Mini_Arm)由AI生成，内容仅供参考，请仔细甄别
+
 # 其它
 
 开发板规格书：[NodeMCU-32 规格书.pdf](.doc\NodeMCU-32规格书.pdf) 

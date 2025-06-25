@@ -4,6 +4,7 @@ JoystickTask_t joystickTaskInstance;
 
 JoystickTask_t::JoystickTask_t()
 {
+    // 替换为自己的手柄蓝牙MAC地址
     xboxController = XboxSeriesXControllerESP32_asukiaaa::Core("7d:c9:60:ff:0b:62");
 }
 

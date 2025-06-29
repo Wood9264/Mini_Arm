@@ -20,6 +20,7 @@ void JoystickTask_t::run(void *pvParameters)
 
     while (true)
     {
+        //修复断线重连 /test/onloop
         xboxController.onLoop();
         if (xboxController.isConnected())
         {

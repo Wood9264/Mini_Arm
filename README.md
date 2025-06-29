@@ -167,6 +167,90 @@ ESP32是具有两个核心的单片机，可以真正意义上实现双线程并
 - T站原有方案清单中虽然配备了多圈电位器用于关节1的绝对定位，但本项目并未使用。如需实现对关节1的绝对定位，需要连接电位器并使用ADC进行读取。
 - 本项目仅处于原型验证阶段，连线采用面包板和杜邦线，在工程验证阶段绘制PCB可以获得更好的美观和可靠性
 
+## 手柄离线检测
+
+joystick_task主循环中实现了控制器断线重连的逻辑（源自XboxSeriesXControllerESP32_asukiaaa例程），但是经过实际测试，控制器断线以后并没有按照预期的情况重连，一直在输出断线之前的最后一次数据。
+
+XboxSeriesXControllerESP32_asukiaaa库的断线重连逻辑存在几个潜在问题（本部分由AI生成）：
+
+1. 断线检测机制的局限性
+
+库主要依赖BLE层的`onDisconnect`回调来检测控制器断线 XboxSeriesXControllerESP32_asukiaaa.hpp:84-141 。但是这种机制在某些情况下可能不可靠，特别是在网络环境不稳定或BLE信号干扰的情况下，底层的断线事件可能不会及时触发回调。
+
+2. 缺乏基于超时的断线检测
+
+虽然库记录了最后收到通知的时间戳`receivedNotificationAt` XboxSeriesXControllerESP32_asukiaaa.hpp:510 ，但在`onLoop`方法中 XboxSeriesXControllerESP32_asukiaaa.hpp:203-224 没有实现基于超时的主动断线检测逻辑。这意味着如果BLE层没有正确触发断线事件，程序就无法自动检测到控制器已经断线。
+
+3. 连接状态判断的问题
+
+`isConnected()`方法只是简单地检查连接状态是否为`Connected`或`WaitingForFirstNotification` XboxSeriesXControllerESP32_asukiaaa.hpp:258-264 ，但不会验证实际的BLE连接是否仍然有效。
+
+4. 数据缓存问题
+
+当控制器断线时，`xboxNotif`对象中的数据不会被主动清除，导致应用程序继续读取到断线前的最后一次数据 XboxSeriesXControllerESP32_asukiaaa.hpp:143-202 。
+
+5. 已知的硬件兼容性问题
+
+XboxSeriesXControllerESP32_asukiaaa仓库README中提到了ESP32与Xbox控制器连接的已知问题，特别是在不支持Bluetooth 5.0的老版本ESP32上会出现连接不稳定的情况 XboxSeriesXControllerESP32_asukiaaa仓库README.md:37-51。
+
+Notes：
+
+这个问题可能与库的设计架构有关，它过度依赖BLE层的事件通知机制，而没有实现足够的主动检测和恢复机制。建议在使用时添加自定义的超时检测逻辑，并考虑升级到支持Bluetooth 5.0的ESP32硬件以获得更稳定的连接表现。
+
+### 临时解决方案
+
+修改库文件.pio\libdeps\esp32dev\XboxSeriesXControllerESP32_asukiaaa\src\XboxSeriesXControllerESP32_asukiaaa.hpp，在onLoop函数中添加以下内容即可实现断线重连。
+
+```c++
+void onLoop() {
+    //数据超时判断
+    if (isConnected()) {
+      // 检测数据超时（如 2 秒无数据视为断线）
+      if (millis() - receivedNotificationAt > 1000) {
+        Serial.println("Force disconnect due to timeout");
+        // 强制转化为扫描模式
+        connectionState = ConnectionState::Scanning;
+        if (pConnectedClient) {
+          pConnectedClient->disconnect();
+        }
+      }
+    }
+    //原有库文件的内容
+    if (!isConnected()) {
+```
+
+但由于.pio的内容被git忽略，每次拉取都要重新修改，并且直接修改库文件也并非一个规范的方式，此方法仅作为解决断线问题的临时方案。
+
+更优的方案暂未实现，思路如下：
+
+在joystick_task中通过监控`getReceiveNotificationAt()`的返回值来检测是否有新数据到达，以实现离线检测。
+
+使用以下代码的思路完全重置BLE堆栈以实现重新连接。
+
+```c++
+void JoystickTask_t::forceDisconnection()
+{
+    Serial.println("Forcing BLE disconnection and reset...");
+    
+    // 清除所有绑定
+    NimBLEDevice::deleteAllBonds();
+    
+    // 完全重置BLE设备
+    Serial.println("Deinitializing BLE...");
+    NimBLEDevice::deinit(true); // 参数true表示清除所有对象
+    
+    delay(1000); // 等待清理完成
+    
+    // 重新初始化BLE
+    Serial.println("Reinitializing BLE...");
+    NimBLEDevice::init("");
+    
+    delay(500);
+    
+    Serial.println("BLE reset completed");
+}
+```
+
 # 参考项目
 
 [xiaocainiao11111/ESP32_connect_XboxController: ESP32通过蓝牙连接Xbox手柄读取所有的信号](https://github.com/xiaocainiao11111/ESP32_connect_XboxController)
